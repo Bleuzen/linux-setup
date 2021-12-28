@@ -10,9 +10,9 @@ echo "To apply the changes, you will be logged out. Save all of your work now!"
 read -p "Press enter to continue..."
 
 function change_konsole_shell_fish {
-    kwriteconfig5 --file "/home/$USER/.local/share/konsole/Fish.profile" --group General --key Name --type string "Fish"
-    kwriteconfig5 --file "/home/$USER/.local/share/konsole/Fish.profile" --group General --key Command --type string /usr/bin/fish
-    kwriteconfig5 --file "/home/$USER/.config/konsolerc" --group "Desktop Entry" --key "DefaultProfile" --type string "Fish.profile"
+    kwriteconfig5 --file "/home/$USER/.local/share/konsole/fish.profile" --group General --key Name --type string "fish"
+    kwriteconfig5 --file "/home/$USER/.local/share/konsole/fish.profile" --group General --key Command --type string /usr/bin/fish
+    kwriteconfig5 --file "/home/$USER/.config/konsolerc" --group "Desktop Entry" --key "DefaultProfile" --type string "fish.profile"
 }
 
 function kde_configs {
