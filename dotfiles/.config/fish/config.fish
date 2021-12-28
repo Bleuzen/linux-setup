@@ -3,3 +3,5 @@ if status is-interactive
 end
 
 set -U fish_greeting
+
+set PATH $PATH /home/$USER/bin
