@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
-
 if [[ $EUID -eq 0 ]];
 then
     echo "Do not run this as root"
