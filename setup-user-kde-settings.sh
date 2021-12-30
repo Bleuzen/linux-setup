@@ -31,9 +31,9 @@ function kde_configs {
 }
 
 function global_shortcuts {
-    sed -i 's/Expose=Ctrl+F9,/Expose=Ctrl+F9\\\tMeta+A,/g' ~/.config/kglobalshortcutsrc
-    sed -i 's/Window Close=Alt+F4,/Window Close=Alt+F4\\\tMeta+Q,/g' ~/.config/kglobalshortcutsrc
-    sed -i 's/Window Maximize=Meta+PgUp,/Window Maximize=Meta+PgUp\\\tMeta+W,/g' ~/.config/kglobalshortcutsrc
+    sed -i 's/Expose=Ctrl+F9,/Expose=Ctrl+F9\\tMeta+A,/g' ~/.config/kglobalshortcutsrc
+    sed -i 's/Window Close=Alt+F4,/Window Close=Alt+F4\\tMeta+Q,/g' ~/.config/kglobalshortcutsrc
+    sed -i 's/Window Maximize=Meta+PgUp,/Window Maximize=Meta+PgUp\\tMeta+W,/g' ~/.config/kglobalshortcutsrc
 }
 
 function logout {
