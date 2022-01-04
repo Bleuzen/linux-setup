@@ -65,6 +65,10 @@ function install_flatpak {
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 }
 
+function install_pipewire {
+    apt install -y pipewire pipewire-audio-client-libraries pipewire-pulse wireplumber
+}
+
 function install_fish_shell {
     apt install -y fish
 }
@@ -90,6 +94,7 @@ update_system
 install_german_language_packs
 autoinstall_drivers
 install_flatpak
+install_pipewire
 # install_fish_shell
 install_zsh_shell
 install_themes
