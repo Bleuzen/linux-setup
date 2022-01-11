@@ -9,4 +9,4 @@ set -U fish_greeting
 bind -k ppage history-search-backward
 bind -k npage history-search-forward
 
-set PATH $PATH /home/$USER/bin
+set PATH $PATH $HOME/bin
