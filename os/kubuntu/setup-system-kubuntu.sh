@@ -65,6 +65,13 @@ function install_flatpak {
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 }
 
+function allow_flatpak_read_gtk3_theme {
+    flatpak override --filesystem=xdg-config/gtk-3.0/settings.ini:ro && \
+    flatpak override --filesystem=xdg-config/gtk-3.0/gtk.css:ro && \
+    flatpak override --filesystem=xdg-config/gtk-3.0/colors.css:ro && \
+    flatpak override --filesystem=xdg-config/gtk-3.0/assets:ro
+}
+
 function install_pipewire {
     apt install -y pipewire pipewire-audio-client-libraries pipewire-pulse wireplumber
 }
@@ -94,6 +101,7 @@ update_system
 install_german_language_packs
 autoinstall_drivers
 install_flatpak
+# allow_flatpak_read_gtk3_theme
 install_pipewire
 # install_fish_shell
 install_zsh_shell
