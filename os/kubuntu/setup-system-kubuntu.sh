@@ -103,7 +103,7 @@ autoinstall_drivers
 install_flatpak
 # allow_flatpak_read_gtk3_theme
 install_pipewire
-# install_fish_shell
-install_zsh_shell
+install_fish_shell
+# install_zsh_shell
 install_themes
 make_python3_default
