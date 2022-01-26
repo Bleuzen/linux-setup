@@ -24,15 +24,15 @@ function periodically_mark_kernels_auto_installed {
     # This leads to apt never auto removing old kernels and will eventually cause the /boot partition to run out of space.
     # As a workaround: periodically mark all installed kernels as installed automatically for now
     # See: https://github.com/PackageKit/PackageKit/issues/450
-    bash -c 'cat << EOF > /etc/cron.weekly/mark-kernels-auto-installed
+    cat <<"EOF" > /etc/cron.weekly/mark-kernels-auto-installed
 #!/bin/sh
-apt-mark auto \$(apt-mark showmanual | grep -E "^linux-([[:alpha:]]+-)+[[:digit:].]+-[^-]+(|-.+)$")
-EOF'
+apt-mark auto $(apt-mark showmanual | grep -E "^linux-([[:alpha:]]+-)+[[:digit:].]+-[^-]+(|-.+)$")
+EOF
     chmod 755 /etc/cron.weekly/mark-kernels-auto-installed
 }
 
 function allow_updates {
-    bash -c 'cat << EOF > /etc/polkit-1/localauthority/50-local.d/allowupdates.pkla
+    cat <<"EOF" > /etc/polkit-1/localauthority/50-local.d/allowupdates.pkla
 [Normal Staff Permissions]
 #Identity=unix-group:allowupdates
 Identity=unix-user:*
@@ -40,22 +40,22 @@ Action=org.freedesktop.packagekit.upgrade-system;org.freedesktop.packagekit.trig
 ResultAny=no
 ResultInactive=no
 ResultActive=yes
-EOF'
+EOF
 }
 
 function force_discover_auto_updates {
-    bash -c 'cat << EOF > /etc/xdg/PlasmaDiscoverUpdates
+    cat <<"EOF" > /etc/xdg/PlasmaDiscoverUpdates
 [Global]
-UseUnattendedUpdates[\$i]=true
-EOF'
+UseUnattendedUpdates[$i]=true
+EOF
     chmod o+r /etc/xdg/PlasmaDiscoverUpdates
 }
 
 function force_discover_offline_updates {
-    bash -c 'cat << EOF > /etc/xdg/discoverrc
-[Software]
-UseOfflineUpdates[\$i]=true
-EOF'
+    cat <<"EOF" > /etc/xdg/discoverrc
+[Global]
+UseUnattendedUpdates[$i]=true
+EOF
     chmod o+r /etc/xdg/discoverrc
 }
 
