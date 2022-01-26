@@ -19,6 +19,14 @@ Pin-Priority: -10
 EOF'
 }
 
+function periodically_mark_kernels_auto_installed {
+    bash -c 'cat << EOF > /etc/cron.weekly/mark-kernels-auto-installed
+#!/bin/sh
+apt-mark auto $(apt-mark showmanual | grep -E "^linux-([[:alpha:]]+-)+[[:digit:].]+-[^-]+(|-.+)$")
+EOF'
+    chmod 755 /etc/cron.weekly/mark-kernels-auto-installed
+}
+
 function allow_updates {
     bash -c 'cat << EOF > /etc/polkit-1/localauthority/50-local.d/allowupdates.pkla
 [Normal Staff Permissions]
@@ -94,6 +102,7 @@ function make_python3_default {
 
 disable_data_collection
 ban_snap
+periodically_mark_kernels_auto_installed
 allow_updates
 # force_discover_auto_updates
 # force_discover_offline_updates
