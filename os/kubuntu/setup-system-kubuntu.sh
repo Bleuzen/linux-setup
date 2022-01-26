@@ -20,6 +20,10 @@ EOF'
 }
 
 function periodically_mark_kernels_auto_installed {
+    # Kernels installed by Discover / PackageKit are currently always marked as installed manually, even if they got installed by an update
+    # This leads to apt never auto removing old kernels and will eventually cause the /boot partition to run out of space.
+    # As a workaround: periodically mark all installed kernels as installed automatically for now
+    # See: https://github.com/PackageKit/PackageKit/issues/450
     bash -c 'cat << EOF > /etc/cron.weekly/mark-kernels-auto-installed
 #!/bin/sh
 apt-mark auto $(apt-mark showmanual | grep -E "^linux-([[:alpha:]]+-)+[[:digit:].]+-[^-]+(|-.+)$")
