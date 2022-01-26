@@ -26,7 +26,7 @@ function periodically_mark_kernels_auto_installed {
     # See: https://github.com/PackageKit/PackageKit/issues/450
     bash -c 'cat << EOF > /etc/cron.weekly/mark-kernels-auto-installed
 #!/bin/sh
-apt-mark auto $(apt-mark showmanual | grep -E "^linux-([[:alpha:]]+-)+[[:digit:].]+-[^-]+(|-.+)$")
+apt-mark auto \$(apt-mark showmanual | grep -E "^linux-([[:alpha:]]+-)+[[:digit:].]+-[^-]+(|-.+)$")
 EOF'
     chmod 755 /etc/cron.weekly/mark-kernels-auto-installed
 }
