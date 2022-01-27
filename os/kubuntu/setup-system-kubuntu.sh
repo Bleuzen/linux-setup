@@ -105,10 +105,19 @@ function make_python3_default {
 }
 
 function setup_audio_realtime_privileges {
-    # From: https://archlinux.org/packages/community/any/realtime-privileges/
+    # Extracted from package: jackd2
     cat <<"EOF" > /etc/security/limits.d/99-realtime-privileges.conf
-@audio - rtprio 98
-@audio - memlock unlimited
+# Provided by the jackd package.
+#
+# Changes to this file will be preserved.
+#
+# If you want to enable/disable realtime permissions, run
+#
+#    dpkg-reconfigure -p high jackd2
+
+@audio   -  rtprio     95
+@audio   -  memlock    unlimited
+#@audio   -  nice      -19
 EOF
 }
 
