@@ -104,6 +104,14 @@ function make_python3_default {
     apt install -y python-is-python3
 }
 
+function setup_audio_realtime_privileges {
+    # From: https://archlinux.org/packages/community/any/realtime-privileges/
+    cat <<"EOF" > /etc/security/limits.d/99-realtime-privileges.conf
+@audio - rtprio 98
+@audio - memlock unlimited
+EOF
+}
+
 disable_data_collection
 ban_snap
 periodically_mark_kernels_auto_installed
@@ -120,3 +128,4 @@ install_fish_shell
 # install_zsh_shell
 # install_themes
 make_python3_default
+# setup_audio_realtime_privileges
