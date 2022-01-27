@@ -28,6 +28,8 @@ function kde_configs {
     kwriteconfig5 --file kwinrc --group Plugins --key blurEnabled --type bool true
     kwriteconfig5 --file kwinrc --group Plugins --key sheetEnabled --type bool true
     kwriteconfig5 --file kwinrc --group Plugins --key kwin4_effect_dimscreenEnabled --type bool true
+    kwriteconfig5 --file kwinrc --group Effect-PresentWindows --key BorderActivateAll --type number 9
+    kwriteconfig5 --file kwinrc --group TabBox --key BorderActivate --type number 9
 }
 
 function global_shortcuts {
