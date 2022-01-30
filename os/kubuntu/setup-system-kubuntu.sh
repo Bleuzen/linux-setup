@@ -53,8 +53,8 @@ EOF
 
 function force_discover_offline_updates {
     cat <<"EOF" > /etc/xdg/discoverrc
-[Global]
-UseUnattendedUpdates[$i]=true
+[Software]
+UseOfflineUpdates[$i]=true
 EOF
     chmod o+r /etc/xdg/discoverrc
 }
