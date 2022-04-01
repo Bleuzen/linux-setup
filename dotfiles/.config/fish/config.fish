@@ -4,4 +4,6 @@ end
 
 set -U fish_greeting
 
-set PATH $PATH $HOME/bin
+set PATH $PATH \
+    $HOME/bin \
+    $HOME/.local/bin/
