@@ -31,8 +31,9 @@ bindkey '^[[1;5C' forward-word
 bindkey '^H' backward-kill-word
 bindkey '^[[Z' undo
 
-HISTSIZE=1000
-SAVEHIST=1000
+# Keep 5000 lines of history within the shell and save it to ~/.zsh_history:
+HISTSIZE=5000
+SAVEHIST=5000
 HISTFILE=~/.zsh_history
 
 # Do not store "not found" commands in history
