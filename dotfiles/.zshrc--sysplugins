@@ -5,7 +5,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-setopt histignorealldups sharehistory
+setopt histignorealldups sharehistory hist_ignore_space
 
 bindkey -e
 bindkey '^[[7~' beginning-of-line
@@ -34,8 +34,6 @@ bindkey '^[[Z' undo
 HISTSIZE=1000
 SAVEHIST=1000
 HISTFILE=~/.zsh_history
-
-setopt HIST_IGNORE_SPACE
 
 # Do not store "not found" commands in history
 zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
