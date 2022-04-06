@@ -35,6 +35,11 @@ HISTSIZE=1000
 SAVEHIST=1000
 HISTFILE=~/.zsh_history
 
+setopt HIST_IGNORE_SPACE
+
+# Do not store "not found" commands in history
+zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
+
 autoload -Uz compinit
 compinit
 
