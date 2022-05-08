@@ -5,7 +5,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-setopt histignorealldups sharehistory hist_ignore_space
+setopt histignorealldups hist_ignore_space
 
 bindkey -e
 bindkey '^[[7~' beginning-of-line
