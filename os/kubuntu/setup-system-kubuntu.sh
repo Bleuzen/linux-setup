@@ -9,6 +9,10 @@ function disable_data_collection {
     apt purge -y ubuntu-report
 }
 
+function disable_crash_reporting {
+    apt purge -y apport
+}
+
 function ban_snap {
     apt purge -y snapd
     rm -vrf /snap /var/snap /var/lib/snapd /var/cache/snapd /usr/lib/snapd
@@ -122,6 +126,7 @@ EOF
 }
 
 disable_data_collection
+disable_crash_reporting
 ban_snap
 periodically_mark_kernels_auto_installed
 allow_updates
