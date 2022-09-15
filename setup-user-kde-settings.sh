@@ -30,6 +30,7 @@ function kde_configs {
     kwriteconfig5 --file kwinrc --group Plugins --key kwin4_effect_dimscreenEnabled --type bool true
     kwriteconfig5 --file kwinrc --group Effect-PresentWindows --key BorderActivateAll --type number 9
     kwriteconfig5 --file kwinrc --group TabBox --key BorderActivate --type number 9
+    kwriteconfig5 --file kdeglobals --group KDE --key AnimationDurationFactor --type number 0.5
 }
 
 function global_shortcuts {
@@ -43,7 +44,7 @@ function logout {
     qdbus org.kde.ksmserver /KSMServer logout 0 3 3
 }
 
-change_konsole_shell_fish
+# change_konsole_shell_fish
 kde_configs
 global_shortcuts
 logout
