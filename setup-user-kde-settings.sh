@@ -22,8 +22,8 @@ function kde_configs {
     kwriteconfig5 --file ksmserverrc --group General --key loginMode --type string emptySession
     kwriteconfig5 --file kwinrc --group NightColor --key Active --type bool true
     kwriteconfig5 --file kwinrc --group MouseBindings --key CommandAllKey --type string Meta
-    kwriteconfig5 --file kwinrc --group org.kde.kdecoration2 --key ButtonsOnLeft --type string MF
-    kwriteconfig5 --file kwinrc --group org.kde.kdecoration2 --key ButtonsOnRight --type string IAX
+    kwriteconfig5 --file kwinrc --group org.kde.kdecoration2 --key ButtonsOnLeft --type string M
+    kwriteconfig5 --file kwinrc --group org.kde.kdecoration2 --key ButtonsOnRight --type string SFIAX
     kwriteconfig5 --file kwinrc --group Plugins --key CommandAllKey --type string Meta
     kwriteconfig5 --file kwinrc --group Plugins --key blurEnabled --type bool true
     kwriteconfig5 --file kwinrc --group Plugins --key sheetEnabled --type bool true
@@ -31,6 +31,8 @@ function kde_configs {
     kwriteconfig5 --file kwinrc --group Effect-PresentWindows --key BorderActivateAll --type number 9
     kwriteconfig5 --file kwinrc --group TabBox --key BorderActivate --type number 9
     kwriteconfig5 --file kdeglobals --group KDE --key AnimationDurationFactor --type number 0.5
+    kwriteconfig5 --file breezerc --group Windeco --key TitleAlignment --type string AlignLeft
+    kwriteconfig5 --file breezerc --group Windeco --key DrawTitleBarSeparator --type bool false
 }
 
 function global_shortcuts {
