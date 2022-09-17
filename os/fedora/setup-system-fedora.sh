@@ -5,6 +5,14 @@ then
     exec sudo /bin/bash "$0" "$@"
 fi
 
+function dnf_config_defaultyes {
+    echo "defaultyes=True" >> /etc/dnf/dnf.conf
+}
+
+function packages_cleanup {
+    dnf remove -y mariadb kmail kontact kmahjongg kmag kmines kamera kamoso dragon cryfs
+}
+
 function update_system {
     dnf update --refresh -y
 }
@@ -26,6 +34,8 @@ function allow_flatpak_read_gtk3_theme {
     flatpak override --filesystem=xdg-config/gtk-3.0/assets:ro
 }
 
+dnf_config_defaultyes
+packages_cleanup
 update_system
 # install_nvidia_driver
 setup_flathub
