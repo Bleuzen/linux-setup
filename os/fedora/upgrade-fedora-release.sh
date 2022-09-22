@@ -10,4 +10,5 @@ fi
 dnf upgrade --refresh
 dnf install -y dnf-plugin-system-upgrade
 dnf system-upgrade download --releasever=37
-dnf distro-sync -y
+
+# dnf distro-sync -y
