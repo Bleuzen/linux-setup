@@ -14,7 +14,15 @@ function dnf_config_disable_install_weak_deps {
 }
 
 function packages_cleanup {
-    dnf remove -y mariadb kmail kontact kmahjongg kmag kmines kamera kamoso dragon cryfs
+    dnf remove -y mariadb
+}
+
+function packages_cleanup_kde {
+    dnf remove -y kmail kontact kmahjongg kmag kmines kamera kamoso dragon plasma-vault
+}
+
+function packages_cleanup_gnome {
+    dnf remove -y gnome-boxes
 }
 
 function update_system {
@@ -76,8 +84,10 @@ function allow_flatpak_read_gtk3_theme {
 }
 
 dnf_config_defaultyes
-dnf_config_disable_install_weak_deps
-packages_cleanup
+# dnf_config_disable_install_weak_deps
+# packages_cleanup
+# packages_cleanup_kde
+# packages_cleanup_gnome
 update_system
 # enable_nvidia_filtered_rpmfusion
 enable_rpmfusion
@@ -90,4 +100,3 @@ rpmfusion_install_additional_codecs
 # rpmfusion_enable_hardware_codecs_nvidia
 setup_flathub
 # allow_flatpak_read_gtk3_theme
-
