@@ -40,7 +40,7 @@ function allow_updates {
 [Normal Staff Permissions]
 #Identity=unix-group:allowupdates
 Identity=unix-user:*
-Action=org.freedesktop.packagekit.upgrade-system;org.freedesktop.packagekit.trigger-offline-update
+Action=org.freedesktop.packagekit.upgrade-system;org.freedesktop.packagekit.trigger-offline-update;org.freedesktop.Flatpak.runtime-install;org.freedesktop.Flatpak.runtime-uninstall
 ResultAny=no
 ResultInactive=no
 ResultActive=yes
