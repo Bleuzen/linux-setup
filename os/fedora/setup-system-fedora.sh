@@ -13,6 +13,11 @@ function dnf_config_disable_install_weak_deps {
     echo "install_weak_deps=False" >> /etc/dnf/dnf.conf
 }
 
+function dnf_config_speedup {
+    echo "max_parallel_downloads=5" >> /etc/dnf/dnf.conf
+    echo "fastestmirror=True" >> /etc/dnf/dnf.conf
+}
+
 function packages_cleanup {
     dnf remove -y mariadb
 }
@@ -45,7 +50,7 @@ function install_nvidia_driver {
 
 function rpmfusion_install_additional_codecs {
     # Source: https://rpmfusion.org/Howto/Multimedia
-    dnf groupupdate multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin -y
+    dnf groupupdate multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin --allowerasing -y
     dnf groupupdate sound-and-video -y
 }
 
@@ -85,6 +90,7 @@ function allow_flatpak_read_gtk3_theme {
 
 dnf_config_defaultyes
 # dnf_config_disable_install_weak_deps
+dnf_config_speedup
 # packages_cleanup
 # packages_cleanup_kde
 # packages_cleanup_gnome
