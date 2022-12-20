@@ -23,7 +23,7 @@ function packages_cleanup {
 }
 
 function packages_cleanup_non_vm {
-    dnf remove -y virtualbox-guest-additions spice-vdagent spice-webdavd
+    dnf remove -y virtualbox-guest-additions spice-vdagent spice-webdavd xorg-x11-drv-vmware open-vm-tools-desktop
 }
 
 function packages_cleanup_kde {
