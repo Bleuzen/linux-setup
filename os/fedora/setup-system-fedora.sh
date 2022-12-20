@@ -22,6 +22,10 @@ function packages_cleanup {
     dnf remove -y mariadb
 }
 
+function packages_cleanup_non_vm {
+    dnf remove -y virtualbox-guest-additions spice-vdagent spice-webdavd
+}
+
 function packages_cleanup_kde {
     # not sure if needed: akonadi-import-wizard
     dnf remove -y kmail kontact kmahjongg kmag kmines kamera kamoso dragon plasma-vault korganizer kaddressbook krfb krdc akregator kmouth kmousetool kolourpaint konversation
@@ -93,6 +97,7 @@ dnf_config_defaultyes
 # dnf_config_disable_install_weak_deps
 dnf_config_speedup
 # packages_cleanup
+# packages_cleanup_non_vm
 # packages_cleanup_kde
 # packages_cleanup_gnome
 update_system
