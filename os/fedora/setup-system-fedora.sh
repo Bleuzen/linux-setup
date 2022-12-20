@@ -19,7 +19,7 @@ function dnf_config_speedup {
 }
 
 function packages_cleanup {
-    dnf remove -y mariadb
+    dnf remove -y anaconda-live mariadb
 }
 
 function packages_cleanup_non_vm {
