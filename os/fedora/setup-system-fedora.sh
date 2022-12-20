@@ -23,7 +23,7 @@ function packages_cleanup {
 }
 
 function packages_cleanup_kde {
-    dnf remove -y kmail kontact kmahjongg kmag kmines kamera kamoso dragon plasma-vault korganizer akonadi-import-wizard
+    dnf remove -y kmail kontact kmahjongg kmag kmines kamera kamoso dragon plasma-vault korganizer akonadi-import-wizard kaddressbook
 }
 
 function packages_cleanup_gnome {
