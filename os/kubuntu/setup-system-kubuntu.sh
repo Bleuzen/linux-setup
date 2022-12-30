@@ -36,11 +36,13 @@ EOF
 }
 
 function allow_updates {
+    # Optional, to allow flatpak updates (and app (un-)installs) (app-install permission is also needed for some updates which pull in new dependencies):
+    # org.freedesktop.Flatpak.runtime-install;org.freedesktop.Flatpak.runtime-uninstall;org.freedesktop.Flatpak.app-install;org.freedesktop.Flatpak.app-uninstall
     cat <<"EOF" > /etc/polkit-1/localauthority/50-local.d/allowupdates.pkla
 [Normal Staff Permissions]
 #Identity=unix-group:allowupdates
 Identity=unix-user:*
-Action=org.freedesktop.packagekit.upgrade-system;org.freedesktop.packagekit.trigger-offline-update;org.freedesktop.Flatpak.runtime-install;org.freedesktop.Flatpak.runtime-uninstall
+Action=org.freedesktop.packagekit.upgrade-system;org.freedesktop.packagekit.trigger-offline-update
 ResultAny=no
 ResultInactive=no
 ResultActive=yes
