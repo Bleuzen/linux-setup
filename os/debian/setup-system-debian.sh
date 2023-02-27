@@ -32,6 +32,7 @@ function shorten_grub_timeouts {
 # uninstall them here to have a more minimalistic system
 function cleanup_packages_kde {
     apt-get remove -y akregator apper dragonplayer juk k3b kmag kmail kmousetool kmouth knotes konqueror kontrast korganizer kwrite pim-sieve-editor sweeper xterm
+    apt-get autoremove -y
 }
 
 function ban_snap {
@@ -146,6 +147,12 @@ function setup_audio_realtime_privileges {
 EOF
 }
 
+function replace_firefox_esr_with_flatpak {
+    apt-get remove -y firefox-esr
+    apt-get autoremove -y
+    flatpak install -y flathub org.mozilla.firefox
+}
+
 # create_swap_file  # unencrypted swap
 # create_encrypted_swap_file
 shorten_grub_timeouts
@@ -164,3 +171,4 @@ install_pipewire
 # install_themes
 make_python3_default
 # setup_audio_realtime_privileges
+replace_firefox_esr_with_flatpak
