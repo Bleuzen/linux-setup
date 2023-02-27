@@ -151,6 +151,10 @@ function setup_audio_realtime_privileges {
 EOF
 }
 
+function install_firefox_flatpak {
+    flatpak install -y flathub org.mozilla.firefox
+}
+
 # create_swap_file  # unencrypted swap
 # create_encrypted_swap_file
 shorten_grub_timeouts
@@ -173,3 +177,4 @@ install_pipewire
 # install_themes
 make_python3_default
 # setup_audio_realtime_privileges
+install_firefox_flatpak
