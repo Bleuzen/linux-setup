@@ -2,8 +2,11 @@
 
 if [[ $EUID -ne 0 ]];
 then
-    exec sudo /bin/bash "$0" "$@"
+    echo "This script has to be executed as root"
+    exit 1
 fi
+
+PATH="$PATH:/usr/sbin"
 
 function create_swap_file {
     fallocate -l 2G /swapfile
@@ -25,12 +28,10 @@ function shorten_grub_timeouts {
     update-grub
 }
 
-function disable_data_collection {
-    apt purge -y ubuntu-report
-}
-
-function disable_crash_reporting {
-    apt purge -y apport
+# Debian KDE comes with some packages pre-installed which I do not need
+# uninstall them here to have a more minimalistic system
+function cleanup_packages_kde {
+    apt-get remove -y akregator apper dragonplayer juk k3b kmag kmail kmousetool kmouth knotes konqueror kontrast korganizer kwrite pim-sieve-editor sweeper xterm
 }
 
 function ban_snap {
@@ -41,18 +42,6 @@ Package: snapd
 Pin: release a=*
 Pin-Priority: -10
 EOF'
-}
-
-function periodically_mark_kernels_auto_installed {
-    # Kernels installed by Discover / PackageKit are currently always marked as installed manually, even if they got installed by an update
-    # This leads to apt never auto removing old kernels and will eventually cause the /boot partition to run out of space.
-    # As a workaround: periodically mark all installed kernels as installed automatically for now
-    # See: https://github.com/PackageKit/PackageKit/issues/450
-    cat <<"EOF" > /etc/cron.weekly/mark-kernels-auto-installed
-#!/bin/sh
-apt-mark auto $(apt-mark showmanual | grep -E "^linux-([[:alpha:]]+-)+[[:digit:].]+-[^-]+(|-.+)$")
-EOF
-    chmod 755 /etc/cron.weekly/mark-kernels-auto-installed
 }
 
 function allow_updates {
@@ -88,17 +77,23 @@ EOF
     chmod o+r /etc/xdg/discoverrc
 }
 
+# The current bookworm installer generates an incomplete sources list
+# so a valid complete one can be recreated with this function
+function rewrite_bookworm_sources_list {
+        cat << EOF > /etc/apt/sources.list
+deb http://deb.debian.org/debian bookworm main non-free-firmware
+deb-src http://deb.debian.org/debian bookworm main non-free-firmware
+
+deb http://deb.debian.org/debian-security/ bookworm-security main non-free-firmware
+deb-src http://deb.debian.org/debian-security/ bookworm-security main non-free-firmware
+
+deb http://deb.debian.org/debian bookworm-updates main non-free-firmware
+deb-src http://deb.debian.org/debian bookworm-updates main non-free-firmware
+EOF
+}
+
 function update_system {
     apt update && apt upgrade -y
-}
-
-function install_german_language_packs {
-    apt install -y language-pack-de language-pack-gnome-de
-    apt install -y $(check-language-support de)
-}
-
-function autoinstall_drivers {
-    ubuntu-drivers install
 }
 
 function install_flatpak {
@@ -154,17 +149,13 @@ EOF
 # create_swap_file  # unencrypted swap
 # create_encrypted_swap_file
 shorten_grub_timeouts
-disable_data_collection
-disable_crash_reporting
 ban_snap
-periodically_mark_kernels_auto_installed
 # allow_updates  # allow only apt updates
 allow_updates with_flatpak  # allow apt and flatpak updates, gives flatpak un-/install permission to all users
 # force_discover_auto_updates
 # force_discover_offline_updates
+# rewrite_bookworm_sources_list
 update_system
-install_german_language_packs
-autoinstall_drivers
 install_flatpak
 # allow_flatpak_read_gtk3_theme
 install_pipewire
