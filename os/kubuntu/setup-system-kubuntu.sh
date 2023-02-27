@@ -5,6 +5,26 @@ then
     exec sudo /bin/bash "$0" "$@"
 fi
 
+function create_swap_file {
+    fallocate -l 2G /swapfile
+    chmod 600 /swapfile
+    mkswap /swapfile
+    swapon /swapfile
+    echo '/swapfile none swap sw 0 0' >> /etc/fstab
+}
+
+function create_encrypted_swap_file {
+    fallocate -l 2G /cryptswap
+    chmod 600 /cryptswap
+    echo 'cryptswap /cryptswap /dev/urandom swap' >> /etc/crypttab
+    echo '/dev/mapper/cryptswap none swap sw 0 0' >> /etc/fstab
+}
+
+function shorten_grub_timeouts {
+    sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=1\nGRUB_RECORDFAIL_TIMEOUT=1/g' /etc/default/grub
+    update-grub
+}
+
 function disable_data_collection {
     apt purge -y ubuntu-report
 }
@@ -127,6 +147,9 @@ function setup_audio_realtime_privileges {
 EOF
 }
 
+# create_swap_file  # unencrypted swap
+# create_encrypted_swap_file
+shorten_grub_timeouts
 disable_data_collection
 disable_crash_reporting
 ban_snap
