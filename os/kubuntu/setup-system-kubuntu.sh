@@ -21,7 +21,7 @@ function create_encrypted_swap_file {
 }
 
 function shorten_grub_timeouts {
-    sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=1\nGRUB_RECORDFAIL_TIMEOUT=1/g' /etc/default/grub
+    sed -i 's/^GRUB_TIMEOUT=.*$/GRUB_TIMEOUT=1\nGRUB_RECORDFAIL_TIMEOUT=1/g' /etc/default/grub
     update-grub
 }
 

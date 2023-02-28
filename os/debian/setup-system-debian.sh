@@ -24,7 +24,7 @@ function create_encrypted_swap_file {
 }
 
 function shorten_grub_timeouts {
-    sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=1\nGRUB_RECORDFAIL_TIMEOUT=1/g' /etc/default/grub
+    sed -i 's/^GRUB_TIMEOUT=.*$/GRUB_TIMEOUT=1\nGRUB_RECORDFAIL_TIMEOUT=1/g' /etc/default/grub
     update-grub
 }
 
@@ -97,6 +97,16 @@ function update_system {
     apt update && apt upgrade -y
 }
 
+# Plymouth shows a graphical splash / boot screen
+# This also makes it easier to see that (offline) updates are running, hopefully prevents users from shutting down their machine while updating
+# https://wiki.debian.org/plymouth
+function install_plymouth {
+    apt-get install -y plymouth plymouth-themes
+    # Improvement idea: check if line already contains 'splash' before adding it, probably something like: grep -vq '^GRUB_CMDLINE_LINUX_DEFAULT=.*splash.*$'
+    sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& splash/' /etc/default/grub
+    update-grub
+}
+
 function install_flatpak {
     apt install -y flatpak plasma-discover-backend-flatpak
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -163,6 +173,7 @@ allow_updates with_flatpak  # allow apt and flatpak updates, gives flatpak un-/i
 # force_discover_offline_updates
 # rewrite_bookworm_sources_list
 update_system
+install_plymouth  # graphical boot screen, shows update progress
 install_flatpak
 # allow_flatpak_read_gtk3_theme
 install_pipewire
