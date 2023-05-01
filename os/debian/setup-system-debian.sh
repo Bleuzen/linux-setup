@@ -97,6 +97,10 @@ function update_system {
     apt update && apt upgrade -y
 }
 
+function install_recommended_fonts {
+    apt install -y fonts-recommended
+}
+
 # Plymouth shows a graphical splash / boot screen
 # This also makes it easier to see that (offline) updates are running, hopefully prevents users from shutting down their machine while updating
 # https://wiki.debian.org/plymouth
@@ -173,6 +177,7 @@ allow_updates with_flatpak  # allow apt and flatpak updates, gives flatpak un-/i
 # force_discover_offline_updates
 # rewrite_bookworm_sources_list
 update_system
+install_recommended_fonts
 install_plymouth  # graphical boot screen, shows update progress
 install_flatpak
 # allow_flatpak_read_gtk3_theme
