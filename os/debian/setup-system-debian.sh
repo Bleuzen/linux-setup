@@ -31,7 +31,7 @@ function shorten_grub_timeouts {
 # Debian KDE comes with some packages pre-installed which I do not need
 # uninstall them here to have a more minimalistic system
 function cleanup_packages_kde {
-    apt-get remove -y kdepim-runtime akregator apper dragonplayer juk k3b kmag kmail kmousetool kmouth knotes konqueror kontrast korganizer kwrite pim-sieve-editor sweeper xterm
+    apt-get remove -y kdepim-runtime akregator apper dragonplayer juk k3b kmag kmail kmousetool kmouth knotes konqueror kontrast korganizer pim-sieve-editor sweeper xterm
     apt-get autoremove -y
 }
 
