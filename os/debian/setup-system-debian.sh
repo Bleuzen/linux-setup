@@ -127,6 +127,10 @@ function install_pipewire {
     apt install -y pipewire pipewire-audio-client-libraries pipewire-pulse wireplumber
 }
 
+function install_vlc {
+    apt install -y vlc
+}
+
 function install_fish_shell {
     apt install -y fish
 }
@@ -183,6 +187,7 @@ install_plymouth  # graphical boot screen, shows update progress
 install_flatpak
 # allow_flatpak_read_gtk3_theme
 install_pipewire
+install_vlc
 # install_fish_shell
 # install_zsh_shell
 # install_themes
