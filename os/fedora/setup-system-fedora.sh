@@ -55,7 +55,7 @@ function install_nvidia_driver {
 
 function rpmfusion_install_additional_codecs {
     # Source: https://rpmfusion.org/Howto/Multimedia
-    dnf groupupdate multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin --allowerasing -y
+    dnf groupupdate multimedia --setopt="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin --allowerasing -y
     dnf groupupdate sound-and-video -y
 }
 
