@@ -57,7 +57,7 @@ EOF
 
 function allow_updates {
     apt install -y polkitd-pkla
-    ACTIONS="org.freedesktop.packagekit.upgrade-system;org.freedesktop.packagekit.trigger-offline-update"
+    ACTIONS="org.freedesktop.packagekit.system-update;org.freedesktop.packagekit.upgrade-system;org.freedesktop.packagekit.trigger-offline-update"
     if [[ $1 == "with_flatpak" ]]; then
         # allow flatpak updates (and app (un-)installs) (app-install permission is also needed for some updates which pull in new dependencies)
         ACTIONS="$ACTIONS;org.freedesktop.Flatpak.runtime-install;org.freedesktop.Flatpak.runtime-uninstall;org.freedesktop.Flatpak.app-install;org.freedesktop.Flatpak.app-uninstall"
