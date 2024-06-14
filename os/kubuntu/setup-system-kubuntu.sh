@@ -34,6 +34,7 @@ function disable_crash_reporting {
 }
 
 function ban_snap {
+    snap remove firefox
     apt purge -y snapd
     rm -vrf /snap /var/snap /var/lib/snapd /var/cache/snapd /usr/lib/snapd
     bash -c 'cat << EOF > /etc/apt/preferences.d/nosnap.pref
