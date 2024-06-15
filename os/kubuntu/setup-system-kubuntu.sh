@@ -44,6 +44,10 @@ Pin-Priority: -10
 EOF'
 }
 
+function remove_discover_snap_backend {
+    apt purge -y plasma-discover-backend-snap
+}
+
 function periodically_mark_kernels_auto_installed {
     # Kernels installed by Discover / PackageKit are currently always marked as installed manually, even if they got installed by an update
     # This leads to apt never auto removing old kernels and will eventually cause the /boot partition to run out of space.
@@ -157,12 +161,18 @@ function install_firefox_flatpak {
     flatpak install -y flathub org.mozilla.firefox
 }
 
+function apt_autoremove {
+    apt autoremove -y
+}
+
+
 # create_swap_file  # unencrypted swap
 # create_encrypted_swap_file
 shorten_grub_timeouts
 disable_data_collection
 disable_crash_reporting
 ban_snap
+remove_discover_snap_backend
 periodically_mark_kernels_auto_installed
 # allow_updates  # allow only apt updates
 allow_updates with_flatpak  # allow apt and flatpak updates, gives flatpak un-/install permission to all users
@@ -173,10 +183,11 @@ install_german_language_packs
 autoinstall_drivers
 install_flatpak
 # allow_flatpak_read_gtk3_theme
-install_pipewire
+# install_pipewire
 # install_fish_shell
 # install_zsh_shell
 # install_themes
 make_python3_default
 # setup_audio_realtime_privileges
 install_firefox_flatpak
+apt_autoremove
