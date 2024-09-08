@@ -16,7 +16,7 @@ function create_swap_file {
 function create_encrypted_swap_file {
     fallocate -l 2G /cryptswap
     chmod 600 /cryptswap
-    echo 'cryptswap /cryptswap /dev/urandom swap' >> /etc/crypttab
+    echo 'cryptswap /cryptswap /dev/urandom swap,cipher=aes-xts-plain64,size=512,sector-size=4096' >> /etc/crypttab
     echo '/dev/mapper/cryptswap none swap sw 0 0' >> /etc/fstab
 }
 
