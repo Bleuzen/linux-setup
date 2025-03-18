@@ -9,7 +9,7 @@ fi
 PATH="$PATH:/usr/sbin"
 
 function create_swap_file {
-    fallocate -l 2G /swapfile
+    fallocate -l 4G /swapfile
     chmod 600 /swapfile
     mkswap /swapfile
     swapon /swapfile
@@ -17,7 +17,8 @@ function create_swap_file {
 }
 
 function create_encrypted_swap_file {
-    fallocate -l 2G /cryptswap
+    apt-get install -y systemd-cryptsetup
+    fallocate -l 4G /cryptswap
     chmod 600 /cryptswap
     echo 'cryptswap /cryptswap /dev/urandom swap,cipher=aes-xts-plain64,size=512,sector-size=4096' >> /etc/crypttab
     echo '/dev/mapper/cryptswap none swap sw 0 0' >> /etc/fstab
@@ -36,7 +37,7 @@ function cleanup_packages_kde {
 }
 
 function ban_snap {
-    apt purge -y snapd
+    apt-get purge -y snapd
     rm -vrf /snap /var/snap /var/lib/snapd /var/cache/snapd /usr/lib/snapd
     bash -c 'cat << EOF > /etc/apt/preferences.d/nosnap.pref
 Package: snapd
@@ -46,21 +47,32 @@ EOF'
 }
 
 function allow_updates {
-    apt install -y polkitd-pkla
-    ACTIONS="org.freedesktop.packagekit.upgrade-system;org.freedesktop.packagekit.trigger-offline-update"
     if [[ $1 == "with_flatpak" ]]; then
         # allow flatpak updates (and app (un-)installs) (app-install permission is also needed for some updates which pull in new dependencies)
-        ACTIONS="$ACTIONS;org.freedesktop.Flatpak.runtime-install;org.freedesktop.Flatpak.runtime-uninstall;org.freedesktop.Flatpak.app-install;org.freedesktop.Flatpak.app-uninstall"
-    fi
-    cat << EOF > /etc/polkit-1/localauthority/50-local.d/allowupdates.pkla
-[Normal Staff Permissions]
-#Identity=unix-group:allowupdates
-Identity=unix-user:*
-Action=$ACTIONS
-ResultAny=no
-ResultInactive=no
-ResultActive=yes
+        cat << EOF > /etc/polkit-1/rules.d/_allow-updates.rules
+polkit.addRule(function(action, subject) {
+    if ((action.id == "org.freedesktop.packagekit.trigger-offline-update" ||
+         action.id == "org.freedesktop.Flatpak.app-install" ||
+         action.id == "org.freedesktop.Flatpak.runtime-install" ||
+         action.id == "org.freedesktop.Flatpak.app-uninstall" ||
+         action.id == "org.freedesktop.Flatpak.runtime-uninstall") &&
+        subject.active == true && subject.local == true &&
+        subject.isInGroup("users")) {
+            return polkit.Result.YES;
+    }
+});
 EOF
+    else
+        cat << EOF > /etc/polkit-1/rules.d/_allow-updates.rules
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.packagekit.trigger-offline-update" &&
+        subject.active == true && subject.local == true &&
+        subject.isInGroup("users")) {
+            return polkit.Result.YES;
+    }
+});
+EOF
+    fi
 }
 
 function force_discover_auto_updates {
@@ -79,27 +91,12 @@ EOF
     chmod o+r /etc/xdg/discoverrc
 }
 
-# The current bookworm installer generates an incomplete sources list
-# so a valid complete one can be recreated with this function
-function rewrite_bookworm_sources_list {
-        cat << EOF > /etc/apt/sources.list
-deb http://deb.debian.org/debian bookworm main non-free-firmware
-deb-src http://deb.debian.org/debian bookworm main non-free-firmware
-
-deb http://deb.debian.org/debian-security/ bookworm-security main non-free-firmware
-deb-src http://deb.debian.org/debian-security/ bookworm-security main non-free-firmware
-
-deb http://deb.debian.org/debian bookworm-updates main non-free-firmware
-deb-src http://deb.debian.org/debian bookworm-updates main non-free-firmware
-EOF
-}
-
 function update_system {
-    apt update && apt upgrade -y
+    apt-get update && apt-get upgrade -y
 }
 
 function install_recommended_fonts {
-    apt install -y fonts-recommended
+    apt-get install -y fonts-recommended
 }
 
 # Plymouth shows a graphical splash / boot screen
@@ -113,7 +110,7 @@ function install_plymouth {
 }
 
 function install_flatpak {
-    apt install -y flatpak plasma-discover-backend-flatpak
+    apt-get install -y flatpak plasma-discover-backend-flatpak
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 }
 
@@ -125,28 +122,28 @@ function allow_flatpak_read_gtk3_theme {
 }
 
 function install_pipewire {
-    apt install -y pipewire pipewire-audio-client-libraries pipewire-pulse wireplumber
+    apt-get install -y pipewire pipewire-audio-client-libraries pipewire-pulse wireplumber
 }
 
 function install_vlc {
-    apt install -y vlc
+    apt-get install -y vlc
 }
 
 function install_fish_shell {
-    apt install -y fish
+    apt-get install -y fish
 }
 
 function install_zsh_shell {
-    apt install -y zsh
+    apt-get install -y zsh
     # Optional: zsh-autosuggestions zsh-syntax-highlighting zsh-theme-powerlevel9k
 }
 
 function install_themes {
-    apt install -y materia-kde materia-gtk-theme papirus-icon-theme
+    apt-get install -y materia-kde materia-gtk-theme papirus-icon-theme
 }
 
 function make_python3_default {
-    apt install -y python-is-python3
+    apt-get install -y python-is-python3
 }
 
 function setup_audio_realtime_privileges {
@@ -177,21 +174,20 @@ function replace_firefox_esr_with_flatpak {
 shorten_grub_timeouts
 # cleanup_packages_kde
 ban_snap
-# allow_updates  # allow only apt updates
-allow_updates with_flatpak  # allow apt and flatpak updates, gives flatpak un-/install permission to all users
+# allow_updates  # allow only apt-get updates
+allow_updates with_flatpak  # allow apt-get and flatpak updates, gives flatpak un-/install permission to all users
 # force_discover_auto_updates
 # force_discover_offline_updates
-# rewrite_bookworm_sources_list
 update_system
 install_recommended_fonts
-install_plymouth  # graphical boot screen, shows update progress
+# install_plymouth  # graphical boot screen, shows update progress
 install_flatpak
 # allow_flatpak_read_gtk3_theme
-install_pipewire
-install_vlc
+# install_pipewire
+# install_vlc
 # install_fish_shell
 # install_zsh_shell
 # install_themes
-make_python3_default
+# make_python3_default
 # setup_audio_realtime_privileges
 replace_firefox_esr_with_flatpak
