@@ -24,8 +24,19 @@ function create_encrypted_swap_file {
     echo '/dev/mapper/cryptswap none swap sw 0 0' >> /etc/fstab
 }
 
-function shorten_grub_timeouts {
-    sed -i 's/^GRUB_TIMEOUT=.*$/GRUB_TIMEOUT=1\nGRUB_RECORDFAIL_TIMEOUT=1/g' /etc/default/grub
+# function shorten_grub_timeouts {
+#     sed -i 's/^GRUB_TIMEOUT=.*$/GRUB_TIMEOUT=1\nGRUB_RECORDFAIL_TIMEOUT=1/g' /etc/default/grub
+#     update-grub
+# }
+function custom_grub_config {
+    cat << EOF > /etc/default/grub.d/custom.cfg
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=0
+GRUB_RECORDFAIL_TIMEOUT=0
+GRUB_TIMEOUT_STYLE=hidden
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+GRUB_DISABLE_OS_PROBER=true
+EOF
     update-grub
 }
 
@@ -171,7 +182,7 @@ function replace_firefox_esr_with_flatpak {
 
 # create_swap_file  # unencrypted swap
 # create_encrypted_swap_file
-shorten_grub_timeouts
+custom_grub_config
 # cleanup_packages_kde
 ban_snap
 # allow_updates  # allow only apt-get updates
