@@ -47,6 +47,10 @@ function cleanup_packages_kde {
     apt-get autoremove -y
 }
 
+function kde_disable_plasmax11 {
+    dpkg-divert --divert /usr/share/xsessions/plasmax11.desktop.disabled --rename /usr/share/xsessions/plasmax11.desktop
+}
+
 function ban_snap {
     apt-get purge -y snapd
     rm -vrf /snap /var/snap /var/lib/snapd /var/cache/snapd /usr/lib/snapd
@@ -63,6 +67,7 @@ function allow_updates {
         cat << EOF > /etc/polkit-1/rules.d/_allow-updates.rules
 polkit.addRule(function(action, subject) {
     if ((action.id == "org.freedesktop.packagekit.trigger-offline-update" ||
+         action.id == "org.freedesktop.packagekit.system-update" ||
          action.id == "org.freedesktop.Flatpak.app-install" ||
          action.id == "org.freedesktop.Flatpak.runtime-install" ||
          action.id == "org.freedesktop.Flatpak.app-uninstall" ||
@@ -76,7 +81,8 @@ EOF
     else
         cat << EOF > /etc/polkit-1/rules.d/_allow-updates.rules
 polkit.addRule(function(action, subject) {
-    if (action.id == "org.freedesktop.packagekit.trigger-offline-update" &&
+    if ((action.id == "org.freedesktop.packagekit.trigger-offline-update" ||
+         action.id == "org.freedesktop.packagekit.system-update") &&
         subject.active == true && subject.local == true &&
         subject.isInGroup("users")) {
             return polkit.Result.YES;
@@ -184,6 +190,7 @@ function replace_firefox_esr_with_flatpak {
 # create_encrypted_swap_file
 custom_grub_config
 # cleanup_packages_kde
+# kde_disable_plasmax11
 ban_snap
 # allow_updates  # allow only apt-get updates
 allow_updates with_flatpak  # allow apt-get and flatpak updates, gives flatpak un-/install permission to all users
